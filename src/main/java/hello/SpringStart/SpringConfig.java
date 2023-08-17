@@ -1,34 +1,36 @@
 package hello.SpringStart;
 
-import hello.SpringStart.repository.JdbcMemberRepository;
-import hello.SpringStart.repository.MemberRepository;
-import hello.SpringStart.repository.MemoryMemberRepository;
+import hello.SpringStart.repository.*;
 import hello.SpringStart.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
 // bean에 따로 등록하는 방법
 @Configuration
 public class SpringConfig {
 
-    DataSource dataSource;
+    private final MemberRepository memberRepository;
+
     @Autowired
-    public SpringConfig(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public SpringConfig(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 
     @Bean
     public MemberService memberService() {
-        return new MemberService(memberRepository());
+        return new MemberService(memberRepository);
     }
 
-    @Bean
-    public MemberRepository memberRepository() {
+//    @Bean
+//    public MemberRepository memberRepository() {
 //        return new MemoryMemberRepository();
-        return new JdbcMemberRepository(dataSource);
-    }
+//        return new JdbcMemberRepository(dataSource);
+//        return new JdbcTemplateMemberRepository(dataSource);
+//        return new JpaMemberRepository(em);  jpa
+//    }
 
 }
